@@ -1,9 +1,10 @@
 body {
     margin: 0;
     overflow: hidden; 
-    background-color: black;
+    background-color: black; /* Nền đen */
     font-family: sans-serif;
     color: white;
+    text-align: center;
 }
 
 #heartCanvas {
@@ -12,75 +13,37 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 1; /* Lớp nền cho các hiệu ứng */
 }
 
-#app-overlay {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: space-between;
-    /* Dùng pointer-events: none để cho phép nhấp xuyên qua overlay vào canvas
-       Trừ khi ta đang tương tác với một phần tử cụ thể */
-    pointer-events: none; 
-}
-
-#app-overlay > * {
-    pointer-events: auto; /* Kích hoạt lại tương tác cho các phần tử bên trong */
-}
-
-/* --- Header (Thanh trạng thái) --- */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    font-size: 14px;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
-}
-
-.live-tag {
-    background-color: red;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-weight: bold;
-}
-
-.nav-links span {
-    margin: 0 8px;
-    opacity: 0.6;
-    transition: opacity 0.3s;
-    cursor: pointer;
-}
-
-.nav-links .active {
-    opacity: 1;
-    font-weight: bold;
-}
-
-/* --- Description Text --- */
-.description-text {
+/* Container cho chữ và tiêu đề, nằm trên canvas và được căn giữa */
+#effect-container {
     position: absolute;
-    top: 60px;
-    left: 15px;
-    font-size: 13px;
-    text-shadow: 0 0 5px black;
-    max-width: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 2; /* Đảm bảo nằm trên canvas */
+}
+
+.main-title {
+    font-size: 2em;
+    color: #FF69B4; /* Màu hồng neon */
+    text-shadow: 0 0 15px #FF69B4, 0 0 25px rgba(255, 105, 180, 0.5);
+    margin-bottom: 50px;
 }
 
 /* --- Spinning Text 3D (Chữ xoay) --- */
 #spinning-text-container {
-    position: absolute;
-    top: 55%; /* Vị trí giữa trái tim và footer */
-    left: 50%;
+    /* Đặt tâm xoay */
+    position: relative;
+    margin: 0 auto;
+    width: 200px;
+    height: 100px;
+    
     transform-style: preserve-3d;
     perspective: 800px;
     animation: spin 30s linear infinite; /* Xoay toàn bộ container */
-    height: 100px;
-    width: 100px;
-    transform: translateX(-50%);
 }
 
 .word {
@@ -89,107 +52,24 @@ header {
     text-transform: uppercase;
     color: #00FFFF; /* Màu xanh neon */
     font-weight: bold;
-    text-shadow: 0 0 10px #00FFFF;
+    text-shadow: 0 0 10px #00FFFF, 0 0 5px rgba(0, 255, 255, 0.5);
+    
+    /* Căn giữa tuyệt đối từng từ trong container */
     top: 50%;
     left: 50%;
-    transform-origin: 0 0 0;
+    transform-origin: 0 0 0; 
 }
 
-/* Áp dụng 3D Transform cho từng từ để tạo thành hình tròn xoay */
-/* Bạn có thể thêm nhiều từ hơn và điều chỉnh góc xoay */
+/* Thiết lập vị trí 3D cho từng từ trong vòng tròn (6 từ, cách nhau 60 độ) */
 .word:nth-child(1) { transform: rotateY(0deg) translateZ(150px); }
-.word:nth-child(2) { transform: rotateY(51.42deg) translateZ(150px); }
-.word:nth-child(3) { transform: rotateY(102.84deg) translateZ(150px); }
-.word:nth-child(4) { transform: rotateY(154.26deg) translateZ(150px); }
-.word:nth-child(5) { transform: rotateY(205.68deg) translateZ(150px); }
-.word:nth-child(6) { transform: rotateY(257.1deg) translateZ(150px); }
-.word:nth-child(7) { transform: rotateY(308.52deg) translateZ(150px); }
+.word:nth-child(2) { transform: rotateY(60deg) translateZ(150px); } 
+.word:nth-child(3) { transform: rotateY(120deg) translateZ(150px); }
+.word:nth-child(4) { transform: rotateY(180deg) translateZ(150px); }
+.word:nth-child(5) { transform: rotateY(240deg) translateZ(150px); }
+.word:nth-child(6) { transform: rotateY(300deg) translateZ(150px); }
 
 
 @keyframes spin {
-    from { transform: translateX(-50%) rotateY(0deg); }
-    to { transform: translateX(-50%) rotateY(360deg); }
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
 }
-
-/* --- Footer --- */
-footer {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-    pointer-events: auto;
-}
-
-.info-box {
-    padding: 0 15px 10px;
-}
-
-.info-box .title {
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.info-box .subtitle, .music {
-    font-size: 12px;
-    opacity: 0.8;
-    margin: 3px 0;
-}
-
-nav {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-item {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 10px;
-    padding: 5px;
-    position: relative;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-.nav-item:active {
-    opacity: 0.7;
-}
-
-.nav-item.center-plus {
-    background-color: white;
-    color: black;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    line-height: 40px;
-    margin-top: -15px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    font-weight: bold;
-}
-
-.nav-item .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: red;
-    border-radius: 50%;
-    font-size: 8px;
-    padding: 2px 4px;
-    line-height: 1;
-}
-
-/* --- Icons bên phải (Mô phỏng) --- */
-#app-overlay::after {
-    content: "❤️ 62 \a 💬 6 \a ↗️ 12 \a ⬇️ 5 \a 🐱"; 
-    white-space: pre;
-    position: absolute;
-    right: 15px;
-    /* Vị trí trên thanh nav */
-    bottom: 20vh; 
-    font-size: 16px;
-    line-height: 2.5;
-    text-align: center;
-    pointer-events: none;
-}
-
